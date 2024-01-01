@@ -8,6 +8,8 @@
 import Foundation
 import XCTest
 
+@testable import SendbirdUserManager
+
 /// Unit Testing을 위해 제공되는 base test suite입니다.
 /// 사용을 위해서는 해당 클래스를 상속받고,
 /// `open func userStorageType() -> SBUserStorage.Type!`를 override한뒤, 본인이 구현한 SBUserStorage의 타입을 반환하도록 합니다. 
@@ -47,6 +49,20 @@ open class UserStorageBaseTests: XCTestCase {
         }
         
         let retrievedUsers = storage.getUsers()
+        XCTAssertEqual(users.count, retrievedUsers.count)
+    }
+    
+    public func testGetUserByNickname() {
+        let storage = self.userStorageType().init()
+        let nickname = "1"
+        
+        let users = [SBUser(userId: "1", nickname: nickname), SBUser(userId: "2", nickname: nickname)]
+        
+        for user in users {
+            storage.upsertUser(user)
+        }
+        
+        let retrievedUsers = storage.getUsers(for: nickname)
         XCTAssertEqual(users.count, retrievedUsers.count)
     }
     
