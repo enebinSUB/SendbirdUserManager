@@ -10,18 +10,14 @@ import XCTest
 
 final class UserManagerTests: UserManagerBaseTests {
     override func userManagerType() -> SBUserManager.Type! {
-        MockUserManager.self
+        UserDataManager.self
     }
 }
 
 final class UserStorageTests: UserStorageBaseTests {
     override func userStorageType() -> SBUserStorage.Type! {
-        MockUserStorage.self
+        UserDataStorage.self
     }
 }
 
-//final class NetworkClientTests: NetworkClientBaseTests {
-//    override func networkClientType() -> SBNetworkClient.Type! {
-//        MockNetworkClient.self
-//    }
-//}
+// Network 테스트는 네트워크 클래스에서 DI 이용 직접 진행
