@@ -8,6 +8,8 @@
 import Foundation
 import XCTest
 
+@testable import SendbirdUserManager
+
 /// Unit Testing을 위해 제공되는 base test suite입니다.
 /// 사용을 위해서는 해당 클래스를 상속받고,
 /// `open func userManagerType() -> SBUserManager.Type!`를 override한뒤, 본인이 구현한 SBUserManager의 타입을 반환하도록 합니다.
@@ -16,18 +18,28 @@ open class UserManagerBaseTests: XCTestCase {
         return nil
     }
     
-    public let applicationId = ""   // Note: add an application ID
-    public let apiToken = ""        // Note: add an API Token
+    public let applicationId = "5E692907-F840-42E4-9369-59808E1C7E2D"
+    public let apiToken = "a9331fde752e1c66f8d9af7797f2167fe602d91d"
     
     public func testInitApplicationWithDifferentAppIdClearsData() {
         let userManager = userManagerType().init()
         
         // First init
-        userManager.initApplication(applicationId: "AppID1", apiToken: "Token1")    // Note: Add the first application ID and API Token
+        userManager.initApplication(applicationId: applicationId, apiToken: apiToken)
         
         let userId = UUID().uuidString
         let initialUser = UserCreationParams(userId: userId, nickname: "hello", profileURL: nil)
-        userManager.createUser(params: initialUser) { _ in }
+        let expectation = self.expectation(description: "Wait for user creation")
+        userManager.createUser(params: initialUser) { result in
+            switch result {
+            case .failure:
+                XCTFail("Error should not occur")
+                expectation.fulfill()
+            case .success:
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation])
         
         // Check if the data exist
         let users = userManager.userStorage.getUsers()
@@ -90,7 +102,7 @@ open class UserManagerBaseTests: XCTestCase {
             }
             expectation.fulfill()
         }
-        
+
         wait(for: [expectation], timeout: 10.0)
     }
     
@@ -158,6 +170,9 @@ open class UserManagerBaseTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 10.0)
+        
+        let cachedUser = userManager.userStorage.getUser(for: userId)
+        XCTAssertNotNil(cachedUser, "Check the user properly cached")
     }
     
     public func testGetUsersWithNicknameFilter() {
@@ -195,6 +210,9 @@ open class UserManagerBaseTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 10.0)
+        
+        let cachedUser = userManager.userStorage.getUsers()
+        XCTAssertEqual(cachedUser.count, 2)
     }
     
     // Test that trying to create more than 10 users at once should fail
