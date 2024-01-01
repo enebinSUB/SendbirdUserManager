@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Managing user data using in-memory cache.
+/// This class is thread-safe.
 public class UserDataStorage: SBUserStorage {
     private let synchronizationQueue = DispatchQueue(label: "UserDataStorage.synchronizationQueue",
                                                      qos: .utility,

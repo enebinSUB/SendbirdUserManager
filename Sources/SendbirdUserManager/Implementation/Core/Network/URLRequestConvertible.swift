@@ -7,19 +7,29 @@
 
 import Foundation
 
+/// Protocol to define the requirements for converting an object into a URLRequest.
 protocol URLRequestConvertible {
+    /// The path component of the URL.
     var path: String { get }
-    var header: [String: String] { get } 
+    
+    /// Dictionary containing header fields for the request.
+    var header: [String: String] { get }
+    
+    /// Array of URL query items (parameters) for the request.
     var queries: [URLQueryItem] { get }
+    
+    /// HTTP method (e.g., GET, POST) for the request.
     var httpMethod: HTTPMethod { get }
     
+    /// Function to create a URLRequest using a base URL.
     func asURLRequest(with baseURL: String) throws -> URLRequest
 }
 
 extension URLRequestConvertible {
     var queries: [URLQueryItem] { [] }
     var header: [String : String] { [:] }
-    
+
+    // Default implementation to convert the current object into a URLRequest.
     func asURLRequest(with baseURL: String) throws -> URLRequest {
         guard var urlComponent = URLComponents(string: baseURL) else {
             fatalError("Base URL is not valid")

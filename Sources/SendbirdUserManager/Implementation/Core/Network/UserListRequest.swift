@@ -11,6 +11,7 @@ import Foundation
 enum UserListRequest: Request {
     typealias Response = UserListRequestResponse
     
+    /// Get all users list
     case getUsersList
 }
 

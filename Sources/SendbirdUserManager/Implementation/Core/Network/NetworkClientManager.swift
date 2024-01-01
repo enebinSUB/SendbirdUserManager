@@ -63,6 +63,7 @@ public class NetworkClientManager: SBNetworkClient {
 
 private extension NetworkClientManager {
     func sendRequest(_ operation: NetworkOperation, retryCount: Int = 0) {
+        // Encapsulated retry logic
         let retry: (
             _ data: Data?,
             _ response: URLResponse?,
@@ -107,7 +108,8 @@ private extension NetworkClientManager {
         }
     }
     
-    /// Executes a network request and decodes the JSON response into a `Decodable` type.
+    // Containing a completion handler,
+    // executes a network request and decodes the JSON response into a `Decodable` type.
     struct NetworkOperation {
         let urlRequest: URLRequest
         let completionHandler: (Data?, URLResponse?, Error?) -> Void

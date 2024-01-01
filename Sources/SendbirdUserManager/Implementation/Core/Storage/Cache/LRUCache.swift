@@ -7,7 +7,8 @@
 
 import Foundation
 
-/// LRU Cache is NOT thread-safe
+/// LRU(Least Recently Used) cache structure
+/// This class is NOT thread-safe
 class LRUCache<Key, Value>: KeyValueCaching where Key: Hashable {
     let capacityLimit: Int?
     private var count = 0

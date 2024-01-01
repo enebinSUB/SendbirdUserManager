@@ -11,7 +11,7 @@ import XCTest
 @testable import SendbirdUserManager
 
 class RateLimiterTests: XCTestCase {
-    var rateLimiter: RateLimiting!
+    var rateLimiter: RateLimiter!
     
     override func setUpWithError() throws {
         rateLimiter = RateLimiter(bucketCapacity: 1, throttleInterval: 1)

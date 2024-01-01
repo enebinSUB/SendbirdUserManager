@@ -10,8 +10,11 @@ import Foundation
 enum UserRequest: Request {
     typealias Response = SBUser
     
+    /// Create an user
     case create(UserCreationParams)
+    /// Update the user info
     case update(UserUpdateParams)
+    /// Get the user using userId
     case getUser(byId: String)
 }
 
