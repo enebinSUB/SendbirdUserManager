@@ -8,7 +8,8 @@
 import Foundation
 
 public protocol Request {
-    associatedtype Response
+    // 네트워크 응답 처리의 용이성을 위해 부득이 `Decodable`을 추가하게 되었습니다.
+    associatedtype Response: Decodable
 }
 
 public protocol SBNetworkClient {
