@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// HTTP methods enumeration used for network request
+/// Currently supports `get`, `post`, `put` only.
 enum HTTPMethod {
     case get
     case post(body: Encodable)

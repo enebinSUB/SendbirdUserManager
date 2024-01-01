@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// A rate limiter class that controls the execution of operations based on a leaky bucket algorithm, implementing the protocl `RateLimiting`
-/// It ensures that the operations do not exceed a specified rate limit and also thread-safe
+/// A rate limiter class that controls the execution of operations based on a leaky bucket algorithm.
+/// It ensures that the operations do not exceed a specified rate limit and also thread-safe.
 final class RateLimiter {
     typealias Operation = () -> Void
     
