@@ -82,6 +82,7 @@ extension SBError {
         case retryLimitExceeded(underlying: Error?, trial: Int)
         case apiTokenNotProvided
         case applicationIdNotProvided
+        case improperRequest(message: String)
         var description: String {
             switch self {
             case let .retryLimitExceeded(underlyingError, trial):
@@ -91,6 +92,8 @@ extension SBError {
                 return "API token is not provided."
             case .applicationIdNotProvided:
                 return "Application ID is not provided."
+            case .improperRequest(let message):
+                return message
             }
         }
     }

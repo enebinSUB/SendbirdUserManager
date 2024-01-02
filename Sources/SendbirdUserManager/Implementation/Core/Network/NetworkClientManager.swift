@@ -130,13 +130,28 @@ private extension NetworkClientManager {
                     return
                 }
                 
+                let decoder = JSONDecoder()
+                
                 do {
-                    let decodedResponse = try JSONDecoder().decode(Response.self, from: data)
+                    let decodedResponse = try decoder.decode(Response.self, from: data)
                     completionHandler(.success(decodedResponse))
                 } catch {
-                    completionHandler(.failure(error))
+                    // Attempt to decode as ErrorResponse
+                    if let errorResponse = try? decoder.decode(ErrorResponse.self, from: data), errorResponse.error == true {
+                        let requestError = SBError.network(.improperRequest(message: errorResponse.message + " Code: \(errorResponse.code)"))
+                        completionHandler(.failure(requestError))
+                    } else {
+                        // If it's not an ErrorResponse, forward the original error
+                        completionHandler(.failure(error))
+                    }
                 }
             }
         }
+    }
+    
+    struct ErrorResponse: Decodable {
+        let error: Bool
+        let message: String
+        let code: Int
     }
 }
