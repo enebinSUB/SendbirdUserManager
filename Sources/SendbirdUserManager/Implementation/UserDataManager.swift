@@ -117,7 +117,7 @@ public class UserDataManager: SBUserManager {
                 let affectedUsers = creationFailures.map { $0.params }
                 completionHandler?(.failure(
                     SBError.user(.listCreationFail(underlying: error, affected: affectedUsers))))
-                Logger.shared.error("Failed to create user list. Affected user: \(affectedUsers). Error: \(error.localizedDescription)")
+                Logger.shared.error("Failed to create user list. Error: \(error.localizedDescription)")
                 return
             }
             
@@ -132,7 +132,7 @@ public class UserDataManager: SBUserManager {
     public func getUser(userId: String, completionHandler: ((UserResult) -> Void)?) {
         if let cachedUser = userStorage.getUser(for: userId) {
             completionHandler?(.success(cachedUser))
-            Logger.shared.info("Retrieved user with ID '\(userId)' from cache.")
+            Logger.shared.info("Successfully retrieved user user with ID '\(userId)'.")
         } else {
             rateLimiter.execute { [weak self] in
                 guard let self else {
@@ -147,7 +147,7 @@ public class UserDataManager: SBUserManager {
                         // Update cache
                         self.userStorage.upsertUser(user)
                         completionHandler?(.success(user))
-                        Logger.shared.info("Successfully retrieved user with ID '\(userId)' from network and updated cache.")
+                        Logger.shared.info("Successfully retrieved user with ID '\(userId)'.")
 
                     case .failure(let error):
                         completionHandler?(.failure(
@@ -172,7 +172,7 @@ public class UserDataManager: SBUserManager {
         let cachedUsers = userStorage.getUsers(for: nicknameMatches)
         if !cachedUsers.isEmpty {
             completionHandler?(.success(cachedUsers))
-            Logger.shared.info("Retrieved users with nickname matching '\(nicknameMatches)' from cache.")
+            Logger.shared.info("Successfully retrieved users with nickname matching '\(nicknameMatches)'.")
         } else {
             rateLimiter.execute { [weak self] in
                 guard let self else {
@@ -192,7 +192,7 @@ public class UserDataManager: SBUserManager {
                         
                         let usersMatched = users.filter { $0.nickname == nicknameMatches }
                         completionHandler?(.success(usersMatched))
-                        Logger.shared.info("Retrieved users with nickname matching '\(nicknameMatches)' from network and updated cache.")
+                        Logger.shared.info("Successfully retrieved users with nickname matching '\(nicknameMatches)'.")
 
                     case .failure(let error):
                         completionHandler?(.failure(

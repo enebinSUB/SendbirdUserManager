@@ -23,14 +23,20 @@ struct Logger {
 
     private func log(_ message: String, type: OSLogType, file: String = #file, function: String = #function, line: Int = #line) {
         let fileName = (file as NSString).lastPathComponent
-        let logMessage = "\(fileName):\(line) \(function) - \(message)"
+        let logMessage = "[SendbirdUserManager] \(fileName):\(line) \(function) - \(message)"
         let log = OSLog(subsystem: subsystem, category: category)
         
         os_log("%{public}@", log: log, type: type, logMessage)
     }
+    
+    private func simpleLog(_ message: String, type: OSLogType) {
+        let log = OSLog(subsystem: subsystem, category: category)
+        
+        os_log("%{public}@", log: log, type: type, "[SendbirdUserManager] " + message)
+    }
 
-    func info(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(message, type: .info, file: file, function: function, line: line)
+    func info(_ message: String) {
+        simpleLog(message, type: .info)
     }
 
     func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
