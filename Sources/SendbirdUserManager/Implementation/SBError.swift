@@ -40,17 +40,14 @@ extension SBError {
             case .creationLimitExceeded:
                 return "User creation limit exceeded."
             case .creationFail(let underlyingError, let affected):
-                return "Failed to create the user \(affected.userId)."
-                        + "\nReason: \(underlyingError)"
+                return "Failed to create user \(affected.userId). Reason: \(underlyingError.localizedDescription)"
             case .listCreationFail(let underlyingError, let affected):
-                return "Failed to create the users \(affected.map { $0.userId }). Other users are created succeessfully"
-                        + "\nReason: \(underlyingError)"
+                let affectedUserIds = affected.map { $0.userId }.joined(separator: ", ")
+                return "Failed to create users with IDs: \(affectedUserIds). Reason: \(underlyingError.localizedDescription)"
             case .updateFail(let underlyingError, let affected):
-                return "Failed to update the user \(affected.userId)."
-                        + "\nReason: \(underlyingError)"
+                return "Failed to update user \(affected.userId). Reason: \(underlyingError.localizedDescription)"
             case .getFail(let underlyingError, let affectedUserId):
-                return "Failed to get the user \(affectedUserId)"
-                        + "\nReason: \(underlyingError)"
+                return "Failed to get user \(affectedUserId). Reason: \(underlyingError.localizedDescription)"
             }
         }
     }
@@ -61,8 +58,7 @@ extension SBError {
         var description: String {
             switch self {
             case .getWithNicknameFail(let underlyingError, let nickname):
-                return "Failed to get the user nickname matching \(nickname)."
-                        + "\nReason: \(underlyingError)"
+                return "Failed to get user with nickname \(nickname). Reason: \(underlyingError.localizedDescription)"
             case .emptyNicknamePattern:
                 return "Nickname pattern shouldn't be empty."
             }
@@ -75,8 +71,7 @@ extension SBError {
         var description: String {
             switch self {
             case let .requestRateHitLimit(throttleInterval, bucketCapacity):
-                return "Request rate limit has been hit."
-                        + "(Throttle Interval: \(throttleInterval) seconds, Bucket Capacity: \(bucketCapacity))"
+                return "Request rate limit hit. Throttle Interval: \(throttleInterval) seconds, Bucket Capacity: \(bucketCapacity)"
             case .selfDeallocated:
                 return "Instance was deallocated before the request could be processed."
             }
@@ -86,17 +81,15 @@ extension SBError {
     enum NetworkFailureReason {
         case retryLimitExceeded(underlying: Error?, trial: Int)
         case apiTokenNotProvided
-        case appplicationIdNotProvided
+        case applicationIdNotProvided
         var description: String {
             switch self {
             case let .retryLimitExceeded(underlyingError, trial):
-                return "Network request retry limit(\(trial)) exceeded."
-                        + "\nReason: \(underlyingError?.localizedDescription ?? String("none"))"
-                
+                let errorDescription = underlyingError?.localizedDescription ?? "Unknown error"
+                return "Network request retry limit (\(trial)) exceeded. Reason: \(errorDescription)"
             case .apiTokenNotProvided:
                 return "API token is not provided."
-            
-            case .appplicationIdNotProvided:
+            case .applicationIdNotProvided:
                 return "Application ID is not provided."
             }
         }

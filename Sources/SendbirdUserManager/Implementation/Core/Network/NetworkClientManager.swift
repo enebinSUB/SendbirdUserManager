@@ -41,7 +41,7 @@ public class NetworkClientManager: SBNetworkClient {
         
         do {
             guard let baseURL = baseURL(using: EnvironmentVariable.applicationId) else {
-                throw SBError.network(.appplicationIdNotProvided)
+                throw SBError.network(.applicationIdNotProvided)
             }
             
             guard let apiToken = EnvironmentVariable.apiToken else {
