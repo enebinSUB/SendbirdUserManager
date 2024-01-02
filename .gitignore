@@ -6,3 +6,4 @@
 *.xcbkptlist
 
 .build/*
+.swiftpm/*
